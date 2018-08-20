@@ -1,0 +1,199 @@
+{
+    "__type__": "cc.AnimationClip",
+    "_name": "end",
+    "_duration": 0.9166667,
+    "curveData": {
+        "paths": {
+            "anim/head": {
+                "props": {
+                    "active": [
+                        {
+                            "frame": 0,
+                            "value": false
+                        },
+                        {
+                            "frame": 0.5,
+                            "value": true
+                        }
+                    ],
+                    "rotation": [
+                        {
+                            "frame": 0.5,
+                            "value": 180
+                        },
+                        {
+                            "frame": 0.6666667,
+                            "value": -20
+                        },
+                        {
+                            "frame": 0.8333333,
+                            "value": 0
+                        }
+                    ]
+                }
+            },
+            "anim/03": {
+                "props": {
+                    "active": [
+                        {
+                            "frame": 0,
+                            "value": false
+                        },
+                        {
+                            "frame": 0.6666667,
+                            "value": true
+                        }
+                    ],
+                    "scaleX": [
+                        {
+                            "frame": 0.6666667,
+                            "value": 0.5
+                        },
+                        {
+                            "frame": 0.8333333,
+                            "value": 1.2
+                        },
+                        {
+                            "frame": 0.9166667,
+                            "value": 1
+                        }
+                    ],
+                    "scaleY": [
+                        {
+                            "frame": 0.6666667,
+                            "value": 0.5
+                        },
+                        {
+                            "frame": 0.8333333,
+                            "value": 1.2
+                        },
+                        {
+                            "frame": 0.9166667,
+                            "value": 1
+                        }
+                    ]
+                }
+            },
+            "anim/02": {
+                "props": {
+                    "active": [
+                        {
+                            "frame": 0,
+                            "value": false
+                        },
+                        {
+                            "frame": 0.33333334,
+                            "value": true
+                        }
+                    ],
+                    "scaleX": [
+                        {
+                            "frame": 0,
+                            "value": 0.7
+                        },
+                        {
+                            "frame": 0.33333334,
+                            "value": 0.7
+                        },
+                        {
+                            "frame": 0.5,
+                            "value": 1.2
+                        },
+                        {
+                            "frame": 0.75,
+                            "value": 1
+                        }
+                    ],
+                    "scaleY": [
+                        {
+                            "frame": 0,
+                            "value": 0.7
+                        },
+                        {
+                            "frame": 0.33333334,
+                            "value": 0.7
+                        },
+                        {
+                            "frame": 0.5,
+                            "value": 1.2
+                        },
+                        {
+                            "frame": 0.75,
+                            "value": 1
+                        }
+                    ]
+                }
+            },
+            "anim/text": {
+                "props": {
+                    "active": [
+                        {
+                            "frame": 0,
+                            "value": false
+                        },
+                        {
+                            "frame": 0.33333334,
+                            "value": true
+                        }
+                    ]
+                }
+            },
+            "anim/bg": {
+                "props": {
+                    "opacity": [
+                        {
+                            "frame": 0,
+                            "value": 100
+                        },
+                        {
+                            "frame": 0.33333334,
+                            "value": 255
+                        }
+                    ],
+                    "x": [
+                        {
+                            "frame": 0,
+                            "value": 80
+                        },
+                        {
+                            "frame": 0.33333334,
+                            "value": 0
+                        }
+                    ]
+                }
+            },
+            "anim/01": {
+                "props": {
+                    "active": [
+                        {
+                            "frame": 0,
+                            "value": false
+                        },
+                        {
+                            "frame": 0.16666667,
+                            "value": true
+                        }
+                    ],
+                    "scaleX": [
+                        {
+                            "frame": 0,
+                            "value": 0.6
+                        },
+                        {
+                            "frame": 0.16666667,
+                            "value": 0.6
+                        },
+                        {
+                            "frame": 0.33333334,
+                            "value": 1.2
+                        },
+                        {
+                            "frame": 0.6666667,
+                            "value": 1
+                        }
+                    ]
+                }
+            }
+        }
+    }
+}

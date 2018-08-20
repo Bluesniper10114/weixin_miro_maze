@@ -1,0 +1,184 @@
+{
+    "__type__": "cc.AnimationClip",
+    "_name": "readygo",
+    "_duration": 2,
+    "curveData": {
+        "paths": {
+            "bg": {
+                "props": {
+                    "color": [],
+                    "x": [
+                        {
+                            "frame": 0,
+                            "value": 80
+                        },
+                        {
+                            "frame": 0.25,
+                            "value": 0
+                        },
+                        {
+                            "frame": 1.8333334,
+                            "value": 0
+                        },
+                        {
+                            "frame": 2,
+                            "value": -80
+                        }
+                    ],
+                    "opacity": [
+                        {
+                            "frame": 0,
+                            "value": 50
+                        },
+                        {
+                            "frame": 0.25,
+                            "value": 255
+                        },
+                        {
+                            "frame": 1.8333334,
+                            "value": 255
+                        },
+                        {
+                            "frame": 2,
+                            "value": 100
+                        }
+                    ],
+                    "active": [
+                        {
+                            "frame": 1.8333334,
+                            "value": true
+                        },
+                        {
+                            "frame": 2,
+                            "value": false
+                        }
+                    ]
+                }
+            },
+            "01": {
+                "props": {
+                    "x": [
+                        {
+                            "frame": 0,
+                            "value": 80
+                        },
+                        {
+                            "frame": 0.25,
+                            "value": 0
+                        },
+                        {
+                            "frame": 1,
+                            "value": 0
+                        },
+                        {
+                            "frame": 1.1666666,
+                            "value": -80
+                        }
+                    ],
+                    "opacity": [
+                        {
+                            "frame": 0,
+                            "value": 100
+                        },
+                        {
+                            "frame": 0.25,
+                            "value": 255
+                        },
+                        {
+                            "frame": 1,
+                            "value": 255
+                        },
+                        {
+                            "frame": 1.1666666,
+                            "value": 100
+                        }
+                    ],
+                    "active": [
+                        {
+                            "frame": 0,
+                            "value": true
+                        },
+                        {
+                            "frame": 1,
+                            "value": true
+                        },
+                        {
+                            "frame": 1.1666666,
+                            "value": false
+                        }
+                    ]
+                }
+            },
+            "02": {
+                "props": {
+                    "x": [
+                        {
+                            "frame": 1.1666666,
+                            "value": 80
+                        },
+                        {
+                            "frame": 1.4166666,
+                            "value": 0
+                        },
+                        {
+                            "frame": 1.8333334,
+                            "value": 0
+                        },
+                        {
+                            "frame": 2,
+                            "value": -80
+                        }
+                    ],
+                    "opacity": [
+                        {
+                            "frame": 0,
+                            "value": 255
+                        },
+                        {
+                            "frame": 1.1666666,
+                            "value": 100
+                        },
+                        {
+                            "frame": 1.4166666,
+                            "value": 255
+                        },
+                        {
+                            "frame": 1.8333334,
+                            "value": 255
+                        },
+                        {
+                            "frame": 2,
+                            "value": 100
+                        }
+                    ],
+                    "active": [
+                        {
+                            "frame": 0,
+                            "value": false
+                        },
+                        {
+                            "frame": 1.1666666,
+                            "value": true
+                        },
+                        {
+                            "frame": 2,
+                            "value": false
+                        }
+                    ],
+                    "scaleX": [
+                        {
+                            "frame": 0,
+                            "value": 1.5
+                        }
+                    ],
+                    "scaleY": [
+                        {
+                            "frame": 0,
+                            "value": 1.5
+                        }
+                    ]
+                }
+            }
+        }
+    }
+}

@@ -1,0 +1,252 @@
+[
+        {
+            "__type__": "cc.SceneAsset",
+            "_name": "MatchingScene",
+            "scene": {
+                "__id__": 1
+            },
+            "asyncLoadAssets": null
+        },
+        {
+            "__type__": "cc.Scene",
+            "_name": "New Node",
+            "_children": [
+                {
+                    "__id__": 2
+                }
+            ],
+            "_anchorPoint": {
+                "__type__": "cc.Vec2"
+            },
+            "autoReleaseAssets": false
+        },
+        {
+            "__type__": "cc.Node",
+            "_name": "Canvas",
+            "_parent": {
+                "__id__": 1
+            },
+            "_children": [
+                {
+                    "__id__": 3
+                },
+                {
+                    "__id__": 4
+                },
+                {
+                    "__id__": 6
+                },
+                {
+                    "__id__": 7
+                }
+            ],
+            "_components": [
+                {
+                    "__type__": "cc.Canvas",
+                    "node": {
+                        "__id__": 2
+                    },
+                    "_designResolution": {
+                        "__type__": "cc.Size",
+                        "width": 720,
+                        "height": 1280
+                    }
+                },
+                {
+                    "__type__": "e10dbvDU81IgLYYPqxUDRCh",
+                    "node": {
+                        "__id__": 2
+                    },
+                    "readygologo": {
+                        "__id__": 6
+                    },
+                    "readygologo2": {
+                        "__id__": 4
+                    },
+                    "readygologo3": {
+                        "__id__": 7
+                    }
+                }
+            ],
+            "_id": "021hJDhXRMJ6I5yJYPcX5e",
+            "_contentSize": {
+                "__type__": "cc.Size",
+                "width": 720,
+                "height": 1280
+            },
+            "_position": {
+                "__type__": "cc.Vec2",
+                "x": 360,
+                "y": 640
+            }
+        },
+        {
+            "__type__": "cc.Node",
+            "_name": "bg",
+            "_parent": {
+                "__id__": 2
+            },
+            "_components": [
+                {
+                    "__type__": "cc.Sprite",
+                    "node": {
+                        "__id__": 3
+                    },
+                    "_spriteFrame": {
+                        "__uuid__": "a2MjXRFdtLlYQ5ouAFv/+R"
+                    },
+                    "_sizeMode": 0
+                }
+            ],
+            "_contentSize": {
+                "__type__": "cc.Size",
+                "width": 1200,
+                "height": 2000
+            }
+        },
+        {
+            "__type__": "cc.Node",
+            "_name": "logo",
+            "_parent": {
+                "__id__": 2
+            },
+            "_children": [
+                {
+                    "__id__": 5
+                }
+            ],
+            "_components": [
+                {
+                    "__type__": "cc.Sprite",
+                    "node": {
+                        "__id__": 4
+                    },
+                    "_spriteFrame": {
+                        "__uuid__": "fbsheT4vFM+rHKCaqmYkuo"
+                    }
+                },
+                {
+                    "__type__": "cc.Widget",
+                    "node": {
+                        "__id__": 4
+                    },
+                    "_alignFlags": 45,
+                    "_originalWidth": 720,
+                    "_originalHeight": 1280
+                }
+            ],
+            "_contentSize": {
+                "__type__": "cc.Size",
+                "width": 720,
+                "height": 1280
+            }
+        },
+        {
+            "__type__": "cc.Node",
+            "_name": "text",
+            "_parent": {
+                "__id__": 4
+            },
+            "_components": [
+                {
+                    "__type__": "cc.Label",
+                    "node": {
+                        "__id__": 5
+                    },
+                    "_useOriginalSize": false,
+                    "_actualFontSize": 30,
+                    "_fontSize": 30,
+                    "_N$string": "游戏加载中",
+                    "_N$horizontalAlign": 1,
+                    "_N$verticalAlign": 1
+                }
+            ],
+            "_color": {
+                "__type__": "cc.Color",
+                "r": 92,
+                "g": 96,
+                "b": 108
+            },
+            "_contentSize": {
+                "__type__": "cc.Size",
+                "width": 150,
+                "height": 40
+            },
+            "_position": {
+                "__type__": "cc.Vec2",
+                "x": -6,
+                "y": -59
+            }
+        },
+        {
+            "__type__": "cc.Node",
+            "_name": "readygologo",
+            "_parent": {
+                "__id__": 2
+            },
+            "_components": [
+                {
+                    "__type__": "cc.Sprite",
+                    "node": {
+                        "__id__": 6
+                    },
+                    "_spriteFrame": {
+                        "__uuid__": "cfo16KrdBB+K7z2eJY5Htx"
+                    }
+                }
+            ],
+            "_color": {
+                "__type__": "cc.Color",
+                "r": 92,
+                "g": 96,
+                "b": 108
+            },
+            "_contentSize": {
+                "__type__": "cc.Size",
+                "width": 100,
+                "height": 100
+            },
+            "_position": {
+                "__type__": "cc.Vec2",
+                "x": -2,
+                "y": 63
+            }
+        },
+        {
+            "__type__": "cc.Node",
+            "_name": "text",
+            "_parent": {
+                "__id__": 2
+            },
+            "_components": [
+                {
+                    "__type__": "cc.Label",
+                    "node": {
+                        "__id__": 7
+                    },
+                    "_useOriginalSize": false,
+                    "_actualFontSize": 30,
+                    "_fontSize": 30,
+                    "_N$string": "等待对方加载完成",
+                    "_N$horizontalAlign": 1,
+                    "_N$verticalAlign": 1
+                }
+            ],
+            "_color": {
+                "__type__": "cc.Color",
+                "r": 92,
+                "g": 96,
+                "b": 108
+            },
+            "_contentSize": {
+                "__type__": "cc.Size",
+                "width": 240,
+                "height": 40
+            },
+            "_position": {
+                "__type__": "cc.Vec2",
+                "x": -6,
+                "y": -59
+            }
+        }
+    ]

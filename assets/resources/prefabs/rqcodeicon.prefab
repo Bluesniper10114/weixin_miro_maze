@@ -1,0 +1,132 @@
+[
+    {
+        "__type__": "cc.Prefab",
+        "_name": "rqcodeicon",
+        "data": {
+            "__id__": 1
+        },
+        "asyncLoadAssets": null
+    },
+    {
+        "__type__": "cc.Node",
+        "_name": "rqcodeicon",
+        "_children": [
+            {
+                "__id__": 2
+            }
+        ],
+        "_components": [
+            {
+                "__type__": "cc.Animation",
+                "node": {
+                    "__id__": 1
+                },
+                "_defaultClip": {
+                    "__uuid__": "22N7PgE5xOlqmECMBxw3/X"
+                },
+                "_clips": [
+                    {
+                        "__uuid__": "22N7PgE5xOlqmECMBxw3/X"
+                    }
+                ]
+            }
+        ],
+        "_prefab": {
+            "__type__": "cc.PrefabInfo",
+            "root": {
+                "__id__": 1
+            },
+            "asset": {
+                "__uuid__": "92+Hx5ziBJ0rhjSha2StAm"
+            },
+            "fileId": "2aILeITZ5Ld5xAhq5CIOWs"
+        },
+        "_position": {
+            "__type__": "cc.Vec2",
+            "x": 245,
+            "y": 241
+        }
+    },
+    {
+        "__type__": "cc.Node",
+        "_name": "erweima",
+        "_parent": {
+            "__id__": 1
+        },
+        "_children": [
+            {
+                "__id__": 3
+            }
+        ],
+        "_components": [
+            {
+                "__type__": "cc.Sprite",
+                "node": {
+                    "__id__": 2
+                },
+                "_spriteFrame": {
+                    "__uuid__": "5fpwB06klPYKDfI59AQ+G8"
+                }
+            }
+        ],
+        "_prefab": {
+            "__type__": "cc.PrefabInfo",
+            "root": {
+                "__id__": 1
+            },
+            "asset": {
+                "__uuid__": "92+Hx5ziBJ0rhjSha2StAm"
+            },
+            "fileId": "5dMGqsnyxPRJ5lBvli777A"
+        },
+        "_contentSize": {
+            "__type__": "cc.Size",
+            "width": 123,
+            "height": 154
+        },
+        "_position": {
+            "__type__": "cc.Vec2",
+            "y": 2.842171E-14
+        }
+    },
+    {
+        "__type__": "cc.Node",
+        "_name": "label",
+        "_parent": {
+            "__id__": 2
+        },
+        "_components": [
+            {
+                "__type__": "cc.Label",
+                "node": {
+                    "__id__": 3
+                },
+                "_useOriginalSize": false,
+                "_actualFontSize": 25,
+                "_fontSize": 25,
+                "_N$string": "更多游戏",
+                "_N$horizontalAlign": 1,
+                "_N$verticalAlign": 1
+            }
+        ],
+        "_prefab": {
+            "__type__": "cc.PrefabInfo",
+            "root": {
+                "__id__": 1
+            },
+            "asset": {
+                "__uuid__": "92+Hx5ziBJ0rhjSha2StAm"
+            },
+            "fileId": "c8cFnyTX1PJL/2MgX/uuc6"
+        },
+        "_contentSize": {
+            "__type__": "cc.Size",
+            "width": 100,
+            "height": 40
+        },
+        "_position": {
+            "__type__": "cc.Vec2",
+            "y": -55
+        }
+    }
+]

@@ -1,0 +1,21 @@
+{
+    "__type__": "cc.AnimationClip",
+    "_name": "arrow",
+    "_duration": 1,
+    "wrapMode": 2,
+    "curveData": {
+        "props": {
+            "opacity": [
+                {
+                    "frame": 0,
+                    "value": 255,
+                    "curve": "cubicInOut"
+                },
+                {
+                    "frame": 1,
+                    "value": 100
+                }
+            ]
+        }
+    }
+}

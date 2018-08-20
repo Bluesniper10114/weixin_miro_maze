@@ -1,0 +1,30 @@
+{
+  "ver": "2.0.0",
+  "uuid": "ffad4851-dca0-491e-8790-effc0ca8040e",
+  "type": "sprite",
+  "wrapMode": "clamp",
+  "filterMode": "bilinear",
+  "subMetas": {
+    "chaoshi2": {
+      "ver": "1.0.3",
+      "uuid": "46ab0d9e-5a64-4a24-ac78-e24295a59a11",
+      "rawTextureUuid": "ffad4851-dca0-491e-8790-effc0ca8040e",
+      "trimType": "auto",
+      "trimThreshold": 1,
+      "rotated": false,
+      "offsetX": 0,
+      "offsetY": 0,
+      "trimX": 0,
+      "trimY": 0,
+      "width": 640,
+      "height": 64,
+      "rawWidth": 640,
+      "rawHeight": 64,
+      "borderTop": 0,
+      "borderBottom": 0,
+      "borderLeft": 0,
+      "borderRight": 0,
+      "subMetas": {}
+    }
+  }
+}
