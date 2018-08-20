@@ -136,4 +136,4 @@ cc.Class({
 
 window.isWeChat = function() {
     return "undefined" != typeof wx;
-}
+};
