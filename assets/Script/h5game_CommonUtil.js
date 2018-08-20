@@ -15,8 +15,8 @@ module.exports = {
         return cc.ResolutionPolicy.SHOW_ALL;
     },
     backToReadyGo: function() {
-        console.log("cc.g_Game.launchParams", cc.g_Game.launchParams, cc.g_Game);
-        var t = cc.g_Game.launchParams.serverHost + "/game/server/getGameFinishUrl";
+        console.log("cc.miroGame.launchParams", cc.miroGame.launchParams, cc.miroGame);
+        var t = cc.miroGame.launchParams.serverHost + "/game/server/getGameFinishUrl";
         Http.get(t, function(n) {
             var e = n.data.address;
             window.location.href = e, window.open(e);
@@ -38,7 +38,7 @@ module.exports = {
         var e = window.location.href, t = null, a = e.lastIndexOf("?");
         return 0 <= a && (t = e.substring(a)), function(a) {
             if (!a) return null;
-            for (var o, n = {}, t = (a = a.substr(1)).split("&"), i = 0; i < t.length; i++) o = t[i].split("="), 
+            for (var o, n = {}, t = (a = a.substr(1)).split("&"), i = 0; i < t.length; i++) o = t[i].split("="),
             n[o[0]] = o[1];
             return n.token && n.userId && n.gameId && n.serverHost ? n : null;
         }(t);

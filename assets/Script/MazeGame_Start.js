@@ -1,15 +1,31 @@
-cc.g_Game = {};
-cc.g_Game.initData = function(t) {
-    cc.g_Game.userList = t, cc.g_Game.userId = "", cc.g_Game.score = [ 0, 0 ], cc.g_Game.game_state = 0, 
-    cc.g_Game.b_isAI = !1, cc.g_Game.game_data = -1, cc.g_Game.seed = -1, cc.g_Game.state = !0, 
-    cc.g_Game.Info = [], cc.g_Game.selfOnline = !1;
+cc.miroGame = {};
+cc.miroGame.initData = function(list_data) {
+    cc.miroGame.userList = list_data,
+        cc.miroGame.userId = "",
+        cc.miroGame.score = [ 0, 0 ],
+        cc.miroGame.game_state = 0,
+        cc.miroGame.b_isAI = !1,
+        cc.miroGame.game_data = -1,
+        cc.miroGame.seed = -1,
+        cc.miroGame.state = !0,
+        cc.miroGame.Info = [],
+        cc.miroGame.selfOnline = !1;
 };
-cc.g_Game.initUserList = function(t) {
-    cc.g_Game.userList = t;
+cc.miroGame.initUserList = function(init_list) {
+    cc.miroGame.userList = init_list;
 };
-window.query = null, window.onShow = !1, require("MazeGame_Ping");
-var o = require("MazeGame_Net"), t = require("cb");
-require("base64"), window.CommonUtil = require("h5game_CommonUtil"), window.Http = require("h5game_Http");
+
+window.query = null;
+window.onShow = !1;
+
+require("MazeGame_Ping");
+require("base64");
+
+var net_state = require("MazeGame_Net"),
+    event = require("cb");
+
+window.CommonUtil = require("h5game_CommonUtil");
+window.Http = require("h5game_Http");
 
 
 cc.Class({
@@ -18,32 +34,58 @@ cc.Class({
         eventSound: cc.AudioClip
     },
     onLoad: function() {
-        console.log("START场景加载", window.query), cc.g_Game.that = this, cc.g_Game.initData([]), 
-        cc.g_Game.launchParams = CommonUtil.getLaunchParams(), console.log("cc.g_Game.launchParams.serverHost", cc.g_Game.launchParams), 
-        cc.g_Game.launchParams && (cc.g_Game.launchParams.serverHost = Base64.fromBase64(cc.g_Game.launchParams.serverHost)), 
-        cc.g_Game.launchParams && console.log("997", cc.g_Game.launchParams), cc.g_Game.launchParams ? ("fake" == cc.g_Game.launchParams.token.substring(0, 4) ? (cc.g_Game.userList = [], 
-        cc.g_Game.userId = cc.g_Game.launchParams.userId, cc.g_Game.b_isAI = !0) : (cc.g_Game.userList = [], 
-        cc.g_Game.userId = cc.g_Game.launchParams.userId, cc.g_Game.b_isAI = !1), cc.director.loadScene("MatchingScene"), 
-        this.node.opacity = 0) : (cc.g_Game.userList = [], cc.g_Game.b_isAI = !0, cc.g_Game.is_single = !0, 
-        !o.isConnect && isWeChat() && wx.showShareMenu({
-            withShareTicket: !0
-        }));
-        var n = cc.director.getScene().getComponentInChildren(cc.Canvas), e = cc.view.getVisibleSize();
-        e.width / e.height < 9 / 16 ? (n.fitWidth = !0, n.fitHeight = !1) : (n.fitWidth = !1, 
-        n.fitHeight = !0);
-        var t = cc.director.getWinSize(), a = cc.find("s_backgoud", this.node);
-        a.width = t.width, a.height = t.height;
+        cc.miroGame.that = this;
+        cc.miroGame.initData([]);
+        cc.miroGame.launchParams = CommonUtil.getLaunchParams();
+        cc.miroGame.launchParams && (cc.miroGame.launchParams.serverHost = Base64.fromBase64(cc.miroGame.launchParams.serverHost));
+        // cc.miroGame.launchParams && console.log("997", cc.miroGame.launchParams),
+        cc.miroGame.launchParams ?
+            (
+                "fake" == cc.miroGame.launchParams.token.substring(0, 4) ?
+                    (
+                        cc.miroGame.userList = [],
+                            cc.miroGame.userId = cc.miroGame.launchParams.userId, cc.miroGame.b_isAI = !0
+                    )
+                    :
+                    (
+                        cc.miroGame.userList = [],
+                            cc.miroGame.userId = cc.miroGame.launchParams.userId, cc.miroGame.b_isAI = !1
+                    ),
+                    cc.director.loadScene("MatchingScene"),
+                    this.node.opacity = 0
+            )
+            :
+            (
+                cc.miroGame.userList = [], cc.miroGame.b_isAI = !0, cc.miroGame.is_single = !0,
+                !net_state.isConnect && isWeChat() && wx.showShareMenu({
+                    withShareTicket: !0
+                })
+            );
+        var mainScene = cc.director.getScene().getComponentInChildren(cc.Canvas),
+            viewSize = cc.view.getVisibleSize();
+        viewSize.width / viewSize.height < 9 / 16 ?
+            (mainScene.fitWidth = !0, mainScene.fitHeight = !1)
+            :
+            (mainScene.fitWidth = !1, mainScene.fitHeight = !0);
+        var windowSize = cc.director.getWinSize(),
+            backgroundSize = cc.find("s_backgoud", this.node);
+        backgroundSize.width = windowSize.width,
+        backgroundSize.height = windowSize.height;
     },
     onEnable: function() {},
     onDisable: function() {},
     start: function() {
-        cc.director.setDisplayStats(!1), this.initButtonHandler("Canvas/b_begin"), this.initButtonHandler("Canvas/b_find"), 
-        t.addEvent("event_ready", this.waitEnterGame), this.exit = this.node.getChildByName("exit"), 
+        cc.director.setDisplayStats(!1);
+        this.initButtonHandler("Canvas/b_begin");
+        this.initButtonHandler("Canvas/b_find");
+        event.addEvent("event_ready", this.waitEnterGame);
+        this.exit = this.node.getChildByName("exit");
         this.showEffet();
     },
     showEffet: function() {
-        var n = cc.moveBy(.5, 0, -20), e = cc.moveBy(.5, 0, 20);
-        this.exit.runAction(cc.repeatForever(cc.sequence(n, e)));
+        var top = cc.moveBy(.5, 0, -20),
+            bottom = cc.moveBy(.5, 0, 20);
+        this.exit.runAction(cc.repeatForever(cc.sequence(top, bottom)));
     },
     onOpenEWM: function() {
         wx.previewImage({
@@ -53,30 +95,41 @@ cc.Class({
     playGame: function() {
         cc.director.loadScene("MazeGame_Main");
     },
-    initButtonHandler: function(n) {
-        var e = cc.find(n);
-        this.addClickEvent(e, this.node, "MazeGame_Start", "onBtnClicked");
+    initButtonHandler: function(button_name) {
+        var button_object = cc.find(button_name);
+        this.addClickEvent(button_object, this.node, "MazeGame_Start", "onBtnClicked");
     },
-    addClickEvent: function(a, e, t, i) {
-        console.log(t + ":" + i);
-        var r = new cc.Component.EventHandler();
-        r.target = e, r.component = t, r.handler = i, a.getComponent(cc.Button).clickEvents.push(r);
+    addClickEvent: function(btn, node, scene, clickevent) {
+        var btn_handle = new cc.Component.EventHandler();
+        btn_handle.target = node;
+        btn_handle.component = scene;
+        btn_handle.handler = clickevent;
+        btn.getComponent(cc.Button).clickEvents.push(btn_handle);
     },
-    onBtnClicked: function(t) {
-        "b_begin" == t.target.name ? (console.log("b_begin"), this.onGameBegin()) : "b_find" == t.target.name && (console.log("b_find"), 
-        this.onGameFindFriend());
+    onBtnClicked: function(btn_obj) {
+        "b_begin" == btn_obj.target.name ?
+            (this.onGameBegin())
+            :
+            "b_find" == btn_obj.target.name && this.onGameFindFriend();
     },
     onGameBegin: function() {
-        cc.audioEngine.play(this.eventSound, !1, 1), cc.g_Game.userList = [], cc.g_Game.b_isAI = !0, 
+        cc.audioEngine.play(this.eventSound, !1, 1);
+        cc.miroGame.userList = [];
+        cc.miroGame.b_isAI = !0;
         cc.director.loadScene("MazeGame_Main");
     },
     onGameFindFriend: function() {
-        null == cc.g_Game.ws && (cc.g_Game.b_isAI = !1, console.log("onGameFindFriend"), 
-        this.s_loading = "等待进入游戏...", o.CreateWebSocket({
-            agreement: "ws",
-            address: "47.96.144.235",
-            port: "3300"
-        }));
+        null == cc.miroGame.ws && (
+            cc.miroGame.b_isAI = !1,
+
+            this.s_loading = "等待进入游戏...",
+
+            net_state.CreateWebSocket({
+                agreement: "ws",
+                address: "47.96.144.235",
+                port: "3300"
+            })
+        );
     },
     waitEnterGame: function() {}
 });

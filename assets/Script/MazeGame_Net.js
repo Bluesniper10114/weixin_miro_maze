@@ -1,8 +1,8 @@
-var d = require("./message/games.message").games, 
-    s = require("./message/msgdef"), 
-    a = require("bytebuffer"), 
-    g = require("./utils/cb"), 
-    u = {
+var game_message = require("./message/games.message").games,
+    message_def = require("./message/msgdef"),
+    byte_buffer = require("bytebuffer"),
+    event = require("./utils/cb"),
+    game_net = {
         MID_GAME_START: 1,
         MID_SELECT_RET: 2,
         MID_MAINSCENE_START: 8,
@@ -13,114 +13,206 @@ var d = require("./message/games.message").games,
         EMENY_OUT_ONLINE: 10,
         SELF_READY: 11,
         isGameOver: !1,
-    }, l = 3;
+    },
+    state_data = 3;
 
-u.Send = function(o, e) {
-    if (0 != cc.g_Game.game_state && null != cc.g_Game.ws) {
-        var t = e ? e.byteLength : 0, i = 0;
-        o == s.GAME_MSG_RETWEET_DATA_REQ && (i = 8, t += 14);
-        var r = new a(6 + t, !0);
-        r.writeUint32(t + 2 + i, 0), r.writeUint16(o, 4), i && r.writeDouble(new Date().getTime() + u.deltaTime, 6), 
-        e && r.append(e, 6 + i), cc.g_Game.ws.send(r.buffer);
+game_net.Send = function(msg_req, data) {
+    if (0 != cc.miroGame.game_state && null != cc.miroGame.ws) {
+        var len = data ? data.byteLength : 0, i = 0;
+
+        msg_req == message_def.GAME_MSG_RETWEET_DATA_REQ && (i = 8, len += 14);
+
+        var byte_data = new byte_buffer(6 + len, !0);
+
+        byte_data.writeUint32(len + 2 + i, 0);
+        byte_data.writeUint16(msg_req, 4);
+
+        i && byte_data.writeDouble(new Date().getTime() + game_net.deltaTime, 6);
+        data && byte_data.append(data, 6 + i);
+        cc.miroGame.ws.send(byte_data.buffer);
     }
-}, u.MsgRetweetData = function(n, e) {
-    if (0 != cc.g_Game.game_state) {
-        var t = new a(12, !0), i = 0;
-        t.writeUint32(6, i), i += 4, t.writeUint16(s.GAME_MSG_RETWEET_DATA_REQ, i), i += 2, 
-        t.writeUint16(n, i), i += 2, t.writeInt32(e, i), console.log("send MsgRetweetData", n, e, t.buffer.byteLength), 
-        u.Send(s.GAME_MSG_RETWEET_DATA_REQ, t.buffer), 2 == n && (u.MID_SELECT_RET_Number_send++, 
-        console.log("MID_SELECT_RET_Number_send", u.MID_SELECT_RET_Number_send));
+};
+
+game_net.MsgRetweetData = function(unit_data, data) {
+    if (0 != cc.miroGame.game_state) {
+        var t = new byte_buffer(12, !0), i = 0;
+        t.writeUint32(6, i);
+        i += 4;
+        t.writeUint16(message_def.GAME_MSG_RETWEET_DATA_REQ, i);
+        i += 2;
+        t.writeUint16(unit_data, i);
+        i += 2;
+        t.writeInt32(data, i);
+
+        game_net.Send(message_def.GAME_MSG_RETWEET_DATA_REQ, t.buffer);
+
+        2 == unit_data && game_net.MID_SELECT_RET_Number_send++;
     }
-}, u.MsgUserScoreReq = function(n, a) {
-    if (0 != cc.g_Game.game_state) {
-        var o = {
-            userId: n,
-            score: a,
-            time: u.deltaTime + new Date().getTime()
-        }, i = new d.MsgUserScoreReq(o);
-        i = i.encode().toBuffer(), console.log("send MsgUserScoreReq", o), u.Send(s.GAME_MSG_USER_SCORE_REQ, i);
+};
+
+game_net.MsgUserScoreReq = function(user_id, score_point) {
+    if (0 != cc.miroGame.game_state) {
+        var msg_data = {
+                userId: user_id,
+                score: score_point,
+                time: game_net.deltaTime + new Date().getTime()
+            },
+            user_score = new game_message.MsgUserScoreReq(msg_data);
+        user_score = user_score.encode().toBuffer();
+        game_net.Send(message_def.GAME_MSG_USER_SCORE_REQ, user_score);
     }
-}, u.OverGame = function() {
-    0 != cc.g_Game.game_state && (cc.g_Game.state = !1, console.log("send OverGame"), 
-    u.Send(s.GAME_MSG_OVER_GAME_REQ));
-}, u.GAME_MSG_ENTER_ROOM_ACK = function(n) {
-    var e = d.MsgEnterRoomAck.decode(n);
-    console.log("recv GAME_MSG_ENTER_ROOM_ACK", e), 0 == e.result && (cc.g_Game.game_state = 2), 
-    e.time && (u.deltaTime = e.time - new Date().getTime()), u.isConnect = !0, u.connectDead = 0, 
-    u.setIntervalID = setInterval(function() {
-        if (u.isConnect) u.isConnect = !1, u.connectDead = 0; else if (u.connectDead++, 
-        5 == u.connectDead && (console.log("与服务器断开，请检查你的网络"), !u.isGameOver)) return u.OverGame(), 
-        void cc.g_Game.that.openGameResult(-1);
-    }, 1e3), console.log("开启定时器Net.setIntervalID=", u.setIntervalID);
-}, u.GAME_MSG_USER_LIST_ACK = function(n) {
-    var e = d.MsgUserListAck.decode(n);
-    if (console.log("recv player data玩家列表改动", e), 1 == e.userList.length) {
-        if (cc.g_Game.game_state == l) return cc.g_Game.state = !1, g.dispatchEvent("Enemy_outoLine", [ 0 ]), 
-        void u.OverGame();
-        if (4 <= cc.g_Game.game_state) return u.OverGame(), void cc.g_Game.that.openGameResult(1);
+};
+
+game_net.OverGame = function() {
+    0 != cc.miroGame.game_state && (cc.miroGame.state = !1, game_net.Send(message_def.GAME_MSG_OVER_GAME_REQ));
+};
+
+game_net.GAME_MSG_ENTER_ROOM_ACK = function(ack_data) {
+    var decode_data = game_message.MsgEnterRoomAck.decode(ack_data);
+
+    0 == decode_data.result && (cc.miroGame.game_state = 2);
+    decode_data.time && (game_net.deltaTime = decode_data.time - new Date().getTime());
+    game_net.isConnect = !0, game_net.connectDead = 0;
+    game_net.setIntervalID = setInterval(function() {
+        if (game_net.isConnect) game_net.isConnect = !1, game_net.connectDead = 0;
+        else if (
+            game_net.connectDead++,
+            5 == game_net.connectDead && !game_net.isGameOver
+        )
+        return game_net.OverGame(),
+        void cc.miroGame.that.openGameResult(-1);
+    }, 1e3);
+};
+
+game_net.GAME_MSG_USER_LIST_ACK = function(ack_data) {
+    var decode_data = game_message.MsgUserListAck.decode(ack_data);
+
+    if (1 == decode_data.userList.length) {
+        if (cc.miroGame.game_state == state_data)
+            return cc.miroGame.state = !1,
+            event.dispatchEvent("Enemy_outoLine", [ 0 ]),
+            void game_net.OverGame();
+        if (4 <= cc.miroGame.game_state)
+            return game_net.OverGame(),
+            void cc.miroGame.that.openGameResult(1);
     }
-    cc.g_Game.initUserList(e.userList), cc.g_Game.b_isAI = 2 > e.userList.length, 2 <= e.userList.length && (cc.g_Game.b_isAI = e.userList[0].isAI || e.userList[1].isAI);
-    for (var t, a = 0; a < e.userList.length; a++) t = e.userList[a], console.log(t.name, t.userId, t.gender);
-    4 != cc.g_Game.game_state && (cc.g_Game.game_state = l, u.MsgRetweetData(u.MID_GAME_START, -1), 
-    g.dispatchEvent("event_ready", [ 0 ]));
-}, u.GAME_MSG_USER_SCORE_REQ = function(t) {
-    d.MsgUserScoreReq.decode(t), console.log("recv score data", t);
-}, u.GAME_MSG_RETWEET_DATA = function(a) {
-    var e, t, i = a.readUInt16(0), r = a.readInt32(2);
-    if (console.log("recv retweet data", i, r), 2 == i && (u.MID_SELECT_RET_Number_Received++, 
-    console.log("MID_SELECT_RET_Number_Received", u.MID_SELECT_RET_Number_Received)), 
-    t = r, (e = i) == u.MID_GAME_START && cc.g_Game.game_state == l ? -1 == t ? (cc.g_Game.game_data = Math.floor(10 * Math.random() + 1), 
-    u.MsgRetweetData(u.MID_GAME_START, cc.g_Game.game_data)) : cc.g_Game.game_data = t : e == u.MID_SELECT_RET ? g.dispatchEvent("event_select", [ t ]) : e == u.EMENY_OUT_ONLINE ? (cc.g_Game.state = !1, 
-    g.dispatchEvent("Enemy_outoLine", [ 0 ])) : e == u.SELF_READY && g.dispatchEvent("Emeny_loading", [ 0 ]), 
-    i == u.MID_ASK_MAIN_READY) {
-        var n = cc.g_Game.that;
-        cc.g_Game.userId == cc.g_Game.userList[0].userId ? n.s_myName && "玩家1" == n.s_myName && (console.log("主机收到询问回应"), 
-        n.tongBuOver()) : n.s_myName && "玩家1" == n.s_myName && 0 == u.isAnswer && (console.log("客机收到询问"), 
-        u.MsgRetweetData(u.MID_ASK_MAIN_READY, 1), u.isAnswer = !0);
+
+    cc.miroGame.initUserList(decode_data.userList);
+    cc.miroGame.b_isAI = 2 > decode_data.userList.length;
+
+    2 <= decode_data.userList.length && (cc.miroGame.b_isAI = decode_data.userList[0].isAI || decode_data.userList[1].isAI);
+
+    for (var t, a = 0; a < decode_data.userList.length; a++) t = decode_data.userList[a];
+
+    4 != cc.miroGame.game_state && (
+        cc.miroGame.game_state = state_data, game_net.MsgRetweetData(game_net.MID_GAME_START, -1),
+        event.dispatchEvent("event_ready", [ 0 ])
+    );
+};
+
+game_net.GAME_MSG_USER_SCORE_REQ = function(msg_data) {
+    game_message.MsgUserScoreReq.decode(msg_data);
+};
+
+game_net.GAME_MSG_RETWEET_DATA = function(msg_data) {
+    var tmp_1, tmp_2,
+        data_uint = msg_data.readUInt16(0),
+        data_int = msg_data.readInt32(2);
+    if (
+        2 == data_uint && game_net.MID_SELECT_RET_Number_Received++,
+        tmp_2 = data_int,
+        (tmp_1 = data_uint) == game_net.MID_GAME_START && cc.miroGame.game_state == state_data ? -1 == tmp_2 ? (cc.miroGame.game_data = Math.floor(10 * Math.random() + 1),
+        game_net.MsgRetweetData(game_net.MID_GAME_START, cc.miroGame.game_data)) : cc.miroGame.game_data = tmp_2 : tmp_1 == game_net.MID_SELECT_RET ? event.dispatchEvent("event_select", [ tmp_2 ]) : tmp_1 == game_net.EMENY_OUT_ONLINE ? (cc.miroGame.state = !1,
+        event.dispatchEvent("Enemy_outoLine", [ 0 ])) : tmp_1 == game_net.SELF_READY && event.dispatchEvent("Emeny_loading", [ 0 ]),
+        data_uint == game_net.MID_ASK_MAIN_READY
+    ) {
+        var game_that = cc.miroGame.that;
+        cc.miroGame.userId == cc.miroGame.userList[0].userId
+            ?
+            game_that.s_myName && "玩家1" == game_that.s_myName && game_that.tongBuOver()
+            :
+            game_that.s_myName && "玩家1" == game_that.s_myName && 0 == game_net.isAnswer && game_net.MsgRetweetData(game_net.MID_ASK_MAIN_READY, 1), game_net.isAnswer = !0;
     }
-    i == u.MID_MAINSCENE_START && (cc.g_Game.seed = r, (n = cc.g_Game.that).myInit(), 
-    console.log("Net收到随机数种子that=", n));
-}, u.MsgEnterRoomReq = function() {
-    if (0 != cc.g_Game.game_state) {
-        var a = "", e = "pvp", l = cc.g_Game.launchParams.token, i = cc.g_Game.launchParams.userId;
-        "" != l && "" != i ? (e = l, a = i) : (a = "mwdLdFS9", e = "standalone1"), console.log("userId", e, a);
-        var r = {
-            userId: cc.g_Game.userId = a,
-            token: e,
-            gameTypeId: parseInt(cc.g_Game.launchParams.gameId)
+
+    data_uint == game_net.MID_MAINSCENE_START && (
+        cc.miroGame.seed = data_int, (game_that = cc.miroGame.that).myInit()
+    );
+};
+
+game_net.MsgEnterRoomReq = function() {
+    if (0 != cc.miroGame.game_state) {
+        var game_token = "", game_id = "pvp",
+            user_token = cc.miroGame.launchParams.token, user_id = cc.miroGame.launchParams.userId;
+        "" != user_token && "" != user_id ? (game_id = user_token, game_token = user_id) : (game_token = "mwdLdFS9", game_id = "standalone1");
+        var game_data = {
+            userId: cc.miroGame.userId = game_token,
+            token: game_id,
+            gameTypeId: parseInt(cc.miroGame.launchParams.gameId)
         };
-        console.log("send MsgEnterRoomReq", r);
-        var n = new d.MsgEnterRoomReq(r);
-        n = n.encode().toBuffer(), console.log("length", n.byteLength), u.Send(s.GAME_MSG_ENTER_ROOM_REQ, n);
+
+        var game_message = new game_message.MsgEnterRoomReq(game_data);
+        game_message = game_message.encode().toBuffer();
+        game_net.Send(message_def.GAME_MSG_ENTER_ROOM_REQ, game_message);
     }
-}, u.GAME_MSG_SERVER_PING = function(n) {
-    u.isConnect = !0;
-    var e = {
-        id: d.MsgServerPing.decode(n).id
-    }, t = new d.MsgServerPing(e);
-    t = t.encode().toBuffer(), u.Send(s.GAME_MSG_SERVER_PING, t);
-}, u.GAME_MSG_GAME_RESULT_ACK = function(n) {
-    var e = d.MsgGameResultAck.decode(n);
-    console.log("返回结果", e);
-}, u.CloseWebSocket = function() {
-    0 != cc.g_Game.game_state && null != cc.g_Game.ws && (cc.g_Game.ws = null, cc.g_Game.state = !1, 
-    u.isGameOver = !0, console.log("清除定时器Net.setIntervalID=", u.setIntervalID), clearInterval(u.setIntervalID));
-}, u.CreateWebSocket = function(t) {
-    console.log("url", t), cc.g_Game.ws = new WebSocket(t), cc.g_Game.ws.binaryType = "arraybuffer", 
-    cc.g_Game.ws.onopen = function() {
-        console.log("connection open ..."), cc.g_Game.game_state = 1, u.MsgEnterRoomReq();
-    }, cc.g_Game.ws.onmessage = function(d) {
-        var e = d.data, t = e.byteLength;
-        (d = new a(t, !0)).append(e, 0);
-        var i = d.readUInt32(0), r = d.readUInt16(4), n = null;
-        0 < i && (n = d.copy(6)), s.GAME_MSG_SERVER_PING, r == s.GAME_MSG_SERVER_PING && cc.g_Game.game_state == l && u.MsgRetweetData(u.SELF_READY, 1), 
-        u.msghandle[r](n);
-    }, cc.g_Game.ws.onclose = function() {
-        console.log("Connection closed."), cc.g_Game.state && g.dispatchEvent("Self_outoLine", [ 0 ]), 
-        u.CloseWebSocket(), cc.g_Game.game_state = 0;
+};
+
+game_net.GAME_MSG_SERVER_PING = function(msg_data) {
+    game_net.isConnect = !0;
+    var data_id = {
+            id: game_message.MsgServerPing.decode(msg_data).id
+        },
+        game_msg = new game_message.MsgServerPing(data_id);
+    game_msg = game_msg.encode().toBuffer();
+    game_net.Send(message_def.GAME_MSG_SERVER_PING, game_msg);
+};
+
+game_net.GAME_MSG_GAME_RESULT_ACK = function(game_data) {
+    var result_ack = game_message.MsgGameResultAck.decode(game_data);
+};
+
+game_net.CloseWebSocket = function() {
+    0 != cc.miroGame.game_state && null != cc.miroGame.ws && (
+        cc.miroGame.ws = null, cc.miroGame.state = !1,
+        game_net.isGameOver = !0,
+        clearInterval(game_net.setIntervalID)
+    );
+};
+
+game_net.CreateWebSocket = function(socket_data) {
+    cc.miroGame.ws = new WebSocket(socket_data),
+    cc.miroGame.ws.binaryType = "arraybuffer",
+    cc.miroGame.ws.onopen = function() {
+        cc.miroGame.game_state = 1;
+        game_net.MsgEnterRoomReq();
     };
-}, u.msghandle = {}, u.msghandle[s.GAME_MSG_ENTER_ROOM_ACK] = u.GAME_MSG_ENTER_ROOM_ACK, 
-u.msghandle[s.GAME_MSG_USER_LIST_ACK] = u.GAME_MSG_USER_LIST_ACK, u.msghandle[s.GAME_MSG_USER_SCORE_REQ] = u.GAME_MSG_USER_SCORE_REQ, 
-u.msghandle[s.GAME_MSG_SERVER_PING] = u.GAME_MSG_SERVER_PING, u.msghandle[s.GAME_MSG_GAME_RESULT_ACK] = u.GAME_MSG_GAME_RESULT_ACK, 
-u.msghandle[s.GAME_MSG_RETWEET_DATA_REQ] = u.GAME_MSG_RETWEET_DATA, 
-module.exports = u;
+    cc.miroGame.ws.onmessage = function(msg_data) {
+        var on_msg = msg_data.data,
+            msg_len = on_msg.byteLength;
+        (msg_data = new byte_buffer(msg_len, !0)).append(on_msg, 0);
+
+        var msg_uint32 = msg_data.readUInt32(0),
+            msg_uint16 = msg_data.readUInt16(4),
+            msg_copy = null;
+
+        0 < msg_uint32 && (msg_copy = msg_data.copy(6));
+        message_def.GAME_MSG_SERVER_PING;
+        msg_uint16 == message_def.GAME_MSG_SERVER_PING && cc.miroGame.game_state == state_data && game_net.MsgRetweetData(game_net.SELF_READY, 1);
+        game_net.msghandle[msg_uint16](msg_copy);
+    };
+
+    cc.miroGame.ws.onclose = function() {
+        cc.miroGame.state && event.dispatchEvent("Self_outoLine", [ 0 ]);
+        game_net.CloseWebSocket();
+        cc.miroGame.game_state = 0;
+    };
+};
+
+game_net.msghandle = {};
+game_net.msghandle[message_def.GAME_MSG_ENTER_ROOM_ACK] = game_net.GAME_MSG_ENTER_ROOM_ACK;
+game_net.msghandle[message_def.GAME_MSG_USER_LIST_ACK] = game_net.GAME_MSG_USER_LIST_ACK;
+game_net.msghandle[message_def.GAME_MSG_USER_SCORE_REQ] = game_net.GAME_MSG_USER_SCORE_REQ;
+game_net.msghandle[message_def.GAME_MSG_SERVER_PING] = game_net.GAME_MSG_SERVER_PING;
+game_net.msghandle[message_def.GAME_MSG_GAME_RESULT_ACK] = game_net.GAME_MSG_GAME_RESULT_ACK;
+game_net.msghandle[message_def.GAME_MSG_RETWEET_DATA_REQ] = game_net.GAME_MSG_RETWEET_DATA;
+
+module.exports = game_net;

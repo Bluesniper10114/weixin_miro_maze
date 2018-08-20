@@ -21,14 +21,14 @@ cc.Class({
           default:
             this._IQ = 7;
         }
-        this._iMapRows = this._aMap.length, this._iMapCols = this._aMap[0].length, this._IQ = Math.floor(13 * Math.random() + 1), 
+        this._iMapRows = this._aMap.length, this._iMapCols = this._aMap[0].length, this._IQ = Math.floor(13 * Math.random() + 1),
         this._player.route || (e.route = [], e.exclude = []);
     },
     thinkMove: function(a, e) {
         if (0 > a.route.indexOf(e)) return null;
         var o = null, s = null;
-        if ("left" === e ? (o = this._aMap[a.row][a.col - 1], s = "right") : "right" === e ? (o = this._aMap[a.row][a.col + 1], 
-        s = "left") : "up" === e ? (o = this._aMap[a.row - 1][a.col], s = "bottom") : "bottom" === e ? (o = this._aMap[a.row + 1][a.col], 
+        if ("left" === e ? (o = this._aMap[a.row][a.col - 1], s = "right") : "right" === e ? (o = this._aMap[a.row][a.col + 1],
+        s = "left") : "up" === e ? (o = this._aMap[a.row - 1][a.col], s = "bottom") : "bottom" === e ? (o = this._aMap[a.row + 1][a.col],
         s = "up") : void 0, null == o) return null;
         if (2 == o.route.length && "180" != o.id) {
             var r = o.route.concat();
@@ -40,7 +40,7 @@ cc.Class({
         };
     },
     autoPlay: function() {
-        if (!cc.g_Game.b_isAI) return null;
+        if (!cc.miroGame.b_isAI) return null;
         var l = this._player;
         if (l.canmove) {
             this._IQ = 13 < this._IQ ? 13 : this._IQ;
@@ -75,9 +75,9 @@ cc.Class({
                         cell: l.cell,
                         orientation: e.orientation,
                         last: e.last
-                    }), cc.g_Game.that.node.emit("movePlayer2", e.orientation); else {
+                    }), cc.miroGame.that.node.emit("movePlayer2", e.orientation); else {
                         var t = l.route.pop();
-                        l.exclude.push(l.cell.id), cc.g_Game.that.node.emit("movePlayer2", a.getContraryOrientation(t.last));
+                        l.exclude.push(l.cell.id), cc.miroGame.that.node.emit("movePlayer2", a.getContraryOrientation(t.last));
                     }
                 }
                 null != l.cell && "180" == l.cell.id || a.autoPlay();
