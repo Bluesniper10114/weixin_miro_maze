@@ -1,4 +1,6 @@
-var net_state = require("MazeGame_Net"), event = require("cb");
+var net_state = require("MiroGame_NetState"),
+    event = require("cb");
+
 window.CommonUI = {};
 
 cc.Class({
@@ -41,7 +43,7 @@ cc.Class({
             return res ? (
                 loading_node.getComponent(cc.Label).string = "加载资源失败.",
                 void setTimeout(function() {
-                    cc.director.loadScene("MazeGame_Start");
+                    cc.director.loadScene("MiroGame_Landing");
                 }, 3e3)
             ) : void (
                 loading_node.active = !1, game_this._prefab_cell = cell_data,
@@ -105,14 +107,15 @@ cc.Class({
         this._player1.node = cc.find("Canvas/player1");
         this._player2.node = cc.find("Canvas/player2");
         this._timeLbl = cc.find("Canvas/time/l_time");
-        this._iMapRows = 23, this.createMap();
+        this._iMapRows = 23;
+        this.createMap();
 
         this.animReadyGo();
 
-        var game_AI = require("MazeGame_AI");
+        var game_AI = require("MiroGame_AI");
         this._ai = new game_AI();
         this._ai.init(this._aMap, this._player2, 3);
-        this._ai.autoPlay();
+        this._ai.autoGo();
     },
     miroBegin: function() {
         this.node.on("touchstart", this.onTouchStart, this);
@@ -150,16 +153,15 @@ cc.Class({
     animReadyGo: function() {
         var count = 0,
             self = this;
-        CommonUI.instance.updateGameBgState(!0),
-            this.schedule(function() {
-                return 3 < count ?
-                    (
-                        CommonUI.instance.updateGameBgState(!1), void self.miroBegin()
-                    ) : void (
-                        2 == count && cc.miroGame.state && cc.audioEngine.play(this.music_readygo, !1, 1),
-                            count++
-                    );
-            }, 1, 4, 1);
+        CommonUI.instance.updateGameBgState(!0);
+        this.schedule(function() {
+            return 3 < count ?
+                (
+                    CommonUI.instance.updateGameBgState(!1), void self.miroBegin()
+                ) : void (
+                    2 == count && cc.miroGame.state && cc.audioEngine.play(this.music_readygo, !1, 1), count++
+                );
+        }, 1, 4, 1);
     },
     createMap: function() {
         this._mapnode.destroyAllChildren();
@@ -466,7 +468,7 @@ cc.Class({
     },
     returnToMain: function() {
         CommonUI.instance = null;
-        cc.director.loadScene("MazeGame_Start");
+        cc.director.loadScene("MiroGame_Landing");
     },
     update: function(time) {
         if (this._isBegin && cc.miroGame.state && !cc.miroGame.is_single) {

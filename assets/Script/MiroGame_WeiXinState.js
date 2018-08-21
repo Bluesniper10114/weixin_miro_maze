@@ -1,4 +1,4 @@
-var netState = require("MazeGame_Net");
+var netState = require("MiroGame_NetState");
 
 "undefined" != typeof wx && (
     wx.onShow(function(common_window) {
@@ -7,11 +7,11 @@ var netState = require("MazeGame_Net");
         window_query.token && window_query.userId && window_query.gameId && !window.onShow && (wx.hideShareMenu(),
         window.query = window_query,
         window.onShow = !0,
-        cc.director.loadScene("MazeGame_Start"));
+        cc.director.loadScene("MiroGame_Landing"));
     }),
 
     wx.onHide(function() {
-        netState.MsgRetweetData(netState.EMENY_OUT_ONLINE, 1),
+        netState.MsgRetweetData(netState.EMENY_OUT_ONLINE, 1);
         isWeChat() && cc.miroGame.launchParams && wx.exitMiniProgram({});
     })
 );

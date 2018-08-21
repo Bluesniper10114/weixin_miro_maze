@@ -21,7 +21,7 @@
     "_active": true,
     "_components": [],
     "_prefab": null,
-    "_id": "24a60161-2319-4f3a-9f5d-c413a6073404",
+    "_id": "2dab2464-6213-448e-8f2e-5ca0df4c305f",
     "_opacity": 255,
     "_color": {
       "__type__": "cc.Color",
@@ -3955,7 +3955,7 @@
     "target": {
       "__id__": 2
     },
-    "component": "MazeGame_Main",
+    "component": "MiroGame_Main",
     "handler": "returnToMain",
     "customEventData": ""
   },
@@ -10415,7 +10415,7 @@
     "_fitHeight": true
   },
   {
-    "__type__": "3f0ffhcd7FCrox+Mwe4IE0r",
+    "__type__": "e67c4h1gttEE4uhGQpRL5l9",
     "_name": "",
     "_objFlags": 0,
     "node": {
@@ -10457,7 +10457,7 @@
     }
   },
   {
-    "__type__": "01744+VA+hGxKd3S0nPVANj",
+    "__type__": "192e2H9NVpAd7EBW+/2vQCZ",
     "_name": "",
     "_objFlags": 0,
     "node": {

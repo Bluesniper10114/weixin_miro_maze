@@ -18,14 +18,14 @@ cc.miroGame.initUserList = function(init_list) {
 window.query = null;
 window.onShow = !1;
 
-require("MazeGame_Ping");
+require("MiroGame_WeiXinState");
 require("base64");
 
-var net_state = require("MazeGame_Net"),
+var net_state = require("MiroGame_NetState"),
     event = require("cb");
 
-window.CommonUtil = require("h5game_CommonUtil");
-window.Http = require("h5game_Http");
+window.CommonUtil = require("MiroGameCommonUtil");
+window.Http = require("MiroGameHttp");
 
 cc.Class({
     extends: cc.Component,
@@ -80,17 +80,17 @@ cc.Class({
         this.exitEffet();
     },
     miroPlay: function() {
-        cc.director.loadScene("MazeGame_Main");
+        cc.director.loadScene("MiroGame_Main");
     },
     onMiroBegin: function() {
         cc.audioEngine.play(this.eventSound, !1, 1);
         cc.miroGame.userList = [];
         cc.miroGame.b_isAI = !0;
-        cc.director.loadScene("MazeGame_Main");
+        cc.director.loadScene("MiroGame_Main");
     },
     initBtnHandle: function(button_name) {
         var button_object = cc.find(button_name);
-        this.addClickEvent(button_object, this.node, "MazeGame_Start", "onBtnClicked");
+        this.addClickEvent(button_object, this.node, "MiroGame_Landing", "onBtnClicked");
     },
     addClickEvent: function(btn, node, scene, clickevent) {
         var btn_handle = new cc.Component.EventHandler();
