@@ -644,7 +644,7 @@
       "__id__": 2
     },
     "component": "MazeGame_Start",
-    "handler": "playGame",
+    "handler": "miroPlay",
     "customEventData": ""
   },
   {

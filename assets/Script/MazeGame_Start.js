@@ -27,7 +27,6 @@ var net_state = require("MazeGame_Net"),
 window.CommonUtil = require("h5game_CommonUtil");
 window.Http = require("h5game_Http");
 
-
 cc.Class({
     extends: cc.Component,
     properties: {
@@ -72,30 +71,24 @@ cc.Class({
         backgroundSize.width = windowSize.width,
         backgroundSize.height = windowSize.height;
     },
-    onEnable: function() {},
-    onDisable: function() {},
     start: function() {
         cc.director.setDisplayStats(!1);
-        this.initButtonHandler("Canvas/b_begin");
-        this.initButtonHandler("Canvas/b_find");
+        this.initBtnHandle("Canvas/b_begin");
+        this.initBtnHandle("Canvas/b_find");
         event.addEvent("event_ready", this.waitEnterGame);
         this.exit = this.node.getChildByName("exit");
-        this.showEffet();
+        this.exitEffet();
     },
-    showEffet: function() {
-        var top = cc.moveBy(.5, 0, -20),
-            bottom = cc.moveBy(.5, 0, 20);
-        this.exit.runAction(cc.repeatForever(cc.sequence(top, bottom)));
-    },
-    onOpenEWM: function() {
-        wx.previewImage({
-            urls: [ "https://h5game.gametall.com/chatgame/cocos_games_res/images/codeImage.jpg" ]
-        });
-    },
-    playGame: function() {
+    miroPlay: function() {
         cc.director.loadScene("MazeGame_Main");
     },
-    initButtonHandler: function(button_name) {
+    onMiroBegin: function() {
+        cc.audioEngine.play(this.eventSound, !1, 1);
+        cc.miroGame.userList = [];
+        cc.miroGame.b_isAI = !0;
+        cc.director.loadScene("MazeGame_Main");
+    },
+    initBtnHandle: function(button_name) {
         var button_object = cc.find(button_name);
         this.addClickEvent(button_object, this.node, "MazeGame_Start", "onBtnClicked");
     },
@@ -108,17 +101,21 @@ cc.Class({
     },
     onBtnClicked: function(btn_obj) {
         "b_begin" == btn_obj.target.name ?
-            (this.onGameBegin())
+            (this.onMiroBegin())
             :
-            "b_find" == btn_obj.target.name && this.onGameFindFriend();
+            "b_find" == btn_obj.target.name && this.onMiroFindOtherFriend();
     },
-    onGameBegin: function() {
-        cc.audioEngine.play(this.eventSound, !1, 1);
-        cc.miroGame.userList = [];
-        cc.miroGame.b_isAI = !0;
-        cc.director.loadScene("MazeGame_Main");
+    exitEffet: function() {
+        var top = cc.moveBy(.5, 0, -20),
+            bottom = cc.moveBy(.5, 0, 20);
+        this.exit.runAction(cc.repeatForever(cc.sequence(top, bottom)));
     },
-    onGameFindFriend: function() {
+    onOpenEWM: function() {
+        wx.previewImage({
+            urls: [ "https://h5game.gametall.com/chatgame/cocos_games_res/images/codeImage.jpg" ]
+        });
+    },
+    onMiroFindOtherFriend: function() {
         null == cc.miroGame.ws && (
             cc.miroGame.b_isAI = !1,
 
@@ -131,7 +128,9 @@ cc.Class({
             })
         );
     },
-    waitEnterGame: function() {}
+    waitEnterGame: function() {},
+    onEnable: function() {},
+    onDisable: function() {}
 });
 
 window.isWeChat = function() {

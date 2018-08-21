@@ -27,7 +27,7 @@ cc.Class({
         this._IQ = Math.floor(13 * Math.random() + 1);
         this._player.route || (player.route = [], player.exclude = []);
     },
-    thinkMove: function(_cell, _id) {
+    movePredict: function(_cell, _id) {
         if (0 > _cell.route.indexOf(_id)) return null;
 
         var pos_cell = null, arrow = null;
@@ -50,14 +50,14 @@ cc.Class({
 
         if (2 == pos_cell.route.length && "180" != pos_cell.id) {
             var _route = pos_cell.route.concat();
-            return _route.splice(_route.indexOf(arrow), 1), this.thinkMove(pos_cell, _route[0]);
+            return _route.splice(_route.indexOf(arrow), 1), this.movePredict(pos_cell, _route[0]);
         }
         return {
             cell: pos_cell,
             orientation: _id
         };
     },
-    autoPlay: function() {
+    autoGo: function() {
         if (!cc.miroGame.b_isAI) return null;
 
         var self_player = this._player;
@@ -75,11 +75,11 @@ cc.Class({
                     0 < self_player.route.length && (last = self_player.route[self_player.route.length - 1].last);
 
                     var get_cell = function d(cell, orient, val) {
-                        orient = self.getContraryOrientation(orient);
+                        orient = self.getOppositeDirection(orient);
                         for (var r, o = cell.route.concat(); 0 < o.length; ) {
                             if (r = Math.floor(Math.random() * o.length), orient != o[r]) {
                                 var n;
-                                if (null == (n = self.thinkMove(cell, o[r])) || 0 <= self_player.exclude.indexOf(n.cell.id) || "180" != n.cell.id && 2 > n.cell.route.length) {
+                                if (null == (n = self.movePredict(cell, o[r])) || 0 <= self_player.exclude.indexOf(n.cell.id) || "180" != n.cell.id && 2 > n.cell.route.length) {
                                     o.splice(r, 1);
                                     continue;
                                 }
@@ -107,14 +107,14 @@ cc.Class({
                     else {
                         var pop_route = self_player.route.pop();
                         self_player.exclude.push(self_player.cell.id);
-                        cc.miroGame.that.node.emit("movePlayer2", self.getContraryOrientation(pop_route.last));
+                        cc.miroGame.that.node.emit("movePlayer2", self.getOppositeDirection(pop_route.last));
                     }
                 }
-                null != self_player.cell && "180" == self_player.cell.id || self.autoPlay();
+                null != self_player.cell && "180" == self_player.cell.id || self.autoGo();
             }, ran_IQ);
         }
     },
-    getContraryOrientation: function(arrow) {
+    getOppositeDirection: function(arrow) {
         return "left" === arrow ?
             "right" : "right" === arrow ?
                     "left" : "up" === arrow ?
